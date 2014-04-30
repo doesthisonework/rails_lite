@@ -9,6 +9,7 @@ class Params
     query_params = parse_www_encoded_form(req.query_string)
     body_params = parse_www_encoded_form(req.body)
     @params = route_params.merge(query_params).merge(body_params)
+    @permitted = []
   end
 
   def [](key)
@@ -28,6 +29,7 @@ class Params
   end
 
   def to_s
+    @params.to_s
   end
 
   class AttributeNotFoundError < ArgumentError; end;

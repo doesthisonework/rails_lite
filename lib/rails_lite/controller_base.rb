@@ -2,6 +2,7 @@ require 'erb'
 require 'active_support/inflector'
 require_relative 'params'
 require_relative 'session'
+# require_relative 'flash'
 
 class ControllerBase
   attr_reader :params, :req, :res
@@ -11,6 +12,7 @@ class ControllerBase
     @req = req
     @res = res
     @params = Params.new(req, route_params)
+    # @flas = Flash.new(flash)
   end
 
   # populate the response with content
