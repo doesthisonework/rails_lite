@@ -25,6 +25,8 @@ class ExampleController < ControllerBase
 </form>
 END
 
+    flash[:errors] = ["Error processed!"]
+
     render_content(page, "text/html")
   end
 end

@@ -2,7 +2,7 @@ require 'erb'
 require 'active_support/inflector'
 require_relative 'params'
 require_relative 'session'
-# require_relative 'flash'
+require_relative 'flash'
 
 class ControllerBase
   attr_reader :params, :req, :res
@@ -12,7 +12,6 @@ class ControllerBase
     @req = req
     @res = res
     @params = Params.new(req, route_params)
-    # @flas = Flash.new(flash)
   end
 
   # populate the response with content
@@ -21,8 +20,9 @@ class ControllerBase
   def render_content(content, type)
     raise 'Response already built' if already_built_response?
     @res.content_type = type
-    @res.body = content
+    @res.body = content + flash[:errors].join("")
     session.store_session(@res)
+    flash.store_flash(@res)
     @already_built_response = true
   end
 
@@ -37,6 +37,7 @@ class ControllerBase
     @res.status = 302
     @res.header['location'] = url
     session.store_session(@res)
+    flash.store_flash(@res)
     @already_built_response = true
   end
 
@@ -53,6 +54,11 @@ class ControllerBase
   # method exposing a `Session` object
   def session
     @session ||= Session.new(@req)
+  end
+
+  #method exposing a 'Flash' object
+  def flash
+    @flash ||= Flash.new(@req)
   end
 
   # use this with the router to call action_name (:index, :show, :create...)

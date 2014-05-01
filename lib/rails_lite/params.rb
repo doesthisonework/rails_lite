@@ -17,11 +17,11 @@ class Params
   end
 
   def permit(*keys)
-    @permitted.nil? ? @permitted = keys : @permitted += keys
+    @permitted.push *keys
   end
 
   def require(key)
-    raise AttributeNotFoundError unless @params.keys.include?(key)
+    raise AttributeNotFoundError unless @params.has_key?(key)
   end
 
   def permitted?(key)
